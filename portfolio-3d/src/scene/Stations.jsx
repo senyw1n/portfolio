@@ -5,25 +5,15 @@ import * as THREE from 'three'
 import { useT } from '../i18n'
 import { ACCENT, REDUCED } from './layout'
 import VoxelMe, { VOXEL_HEIGHT } from './VoxelMe'
-import Envelope from './Envelope'
+import ContactGlobe from './ContactGlobe'
 
 const DARK = '#1b1e22'
 const LINE = '#3a4048'
 const TEXT = '#e8e9e4'
 
-/* ── 05 Контакты: конверт с письмом ── */
+/* ── 05 Контакты: глобус с Алматы и самолётиком (см. ContactGlobe.jsx) ── */
 export function Contact({ on }) {
-  const t = useT()
-  return (
-    <group>
-      <Envelope on={on} />
-      <mesh position={[0, 0.02, 0]} rotation-x={-Math.PI / 2}>
-        <circleGeometry args={[1.6, 48]} />
-        <meshBasicMaterial color="#000" transparent opacity={0.3} />
-      </mesh>
-      <Label on={on} position={[0, 4.5, 0]} className="tag">{t.contact.inbox}</Label>
-    </group>
-  )
+  return <ContactGlobe on={on} />
 }
 
 /* Плавное вращение: само по себе (если анимации разрешены) + за мышью */

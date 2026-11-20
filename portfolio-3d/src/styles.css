@@ -28,6 +28,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .stage { position: fixed; inset: 0; }
 .ui { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
 .ui > * { pointer-events: auto; }
+/* Мягкое затемнение слева, чтобы текст читался поверх огней города */
+.ui::before {
+  content: ""; position: fixed; inset: 0 auto 0 0; width: min(62vw, 980px); pointer-events: none;
+  background: linear-gradient(90deg, rgba(16, 17, 19, .92) 0%, rgba(16, 17, 19, .78) 55%, rgba(16, 17, 19, 0) 100%);
+}
 
 /* ── Обозреватель сцены ── */
 .side {
@@ -82,6 +87,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   animation: rise .7s cubic-bezier(.2, .7, .2, 1) both;
 }
 .content.st-top { width: min(720px, 44vw); }
+.content.st-contact { width: min(540px, 44vw); }
 .content.is-compact { top: 56px; bottom: auto; width: auto; right: 40px; justify-content: flex-start; gap: 10px; }
 .content.is-compact h2 { margin: 0; }
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
@@ -147,16 +153,38 @@ h2 em { font-style: normal; color: transparent; -webkit-text-stroke: 1px var(--t
 .key h3 { font-size: 21px; letter-spacing: -.02em; line-height: 1.2; margin: 2px 0 4px; }
 .key p { color: var(--muted); max-width: 46ch; }
 
-.render { background: var(--accent); color: var(--ink); padding: clamp(22px, 2.6vw, 36px); display: grid; gap: 24px; }
-.render h2 { font-size: clamp(28px, 2.6vw, 44px); text-transform: uppercase; line-height: .9; max-width: none; }
-.render h2 em { -webkit-text-stroke: 1.5px var(--ink); }
-.links { display: grid; border: 1.5px solid var(--ink); }
-.links a { padding: 14px 18px; border-bottom: 1.5px solid var(--ink); transition: .15s; display: block; }
-.links a:last-child { border-bottom: 0; }
-.links a:hover { background: var(--ink); color: var(--accent); }
-.links small { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; display: block; }
-.links b { font-size: clamp(16px, 1.5vw, 20px); word-break: break-word; }
-.foot { font-family: var(--mono); font-size: 12px; opacity: .7; }
+/* ── Контакты ── */
+.contact { display: grid; gap: 22px; }
+.contact .avail {
+  justify-self: start; display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 12px; color: var(--text);
+  padding: 6px 12px; border: 1px solid var(--line); background: rgba(23, 25, 28, .85);
+}
+.contact .avail i { width: 8px; height: 8px; border-radius: 50%; background: #5ad17a; box-shadow: 0 0 0 3px rgba(90, 209, 122, .18); }
+.contact h2 { max-width: 13ch; }
+.contact .btn { display: inline-flex; align-items: center; gap: 9px; }
+.contact .btn.ok { border-color: #5ad17a; color: #5ad17a; }
+.clist { display: grid; border: 1px solid var(--line); background: rgba(23, 25, 28, .88); }
+.clist a {
+  display: grid; grid-template-columns: 40px 1fr 20px; align-items: center; gap: 14px;
+  padding: 13px 16px; border-bottom: 1px solid var(--line); transition: background .15s;
+}
+.clist a:last-child { border-bottom: 0; }
+.clist .ic {
+  width: 40px; height: 40px; display: grid; place-items: center;
+  border: 1px solid var(--line); color: var(--accent); transition: .15s;
+}
+.clist .tx { min-width: 0; }
+.clist small { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.clist b { display: block; font-size: 16px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.clist .ar { color: var(--muted); transition: .15s; }
+.clist a:hover { background: var(--panel-2); }
+.clist a:hover .ic { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+.clist a:hover .ar { color: var(--accent); transform: translate(2px, -2px); }
+.foot { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+/* Подпись города на глобусе */
+.lbl.city { color: var(--ink); background: var(--accent); padding: 3px 8px; }
 
 /* ── Пейджер и строка состояния ── */
 .pager {
@@ -168,15 +196,6 @@ h2 em { font-style: normal; color: transparent; -webkit-text-stroke: 1px var(--t
 .pager button { width: 40px; height: 40px; color: var(--text); }
 .pager button:hover:not(:disabled) { background: var(--accent); color: var(--ink); }
 .pager button:disabled { opacity: .3; cursor: default; }
-
-.status {
-  position: fixed; inset: auto 0 0 0; height: var(--bar);
-  background: var(--panel-2); border-top: 1px solid var(--line);
-  display: flex; align-items: center; gap: 24px; padding: 0 16px;
-  font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: pre; overflow: hidden;
-}
-.status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; margin-right: 8px; }
-.status .right { margin-left: auto; }
 
 /* ── Подписи внутри 3D-сцены ── */
 .lbl {
@@ -221,7 +240,7 @@ h2 em { font-style: normal; color: transparent; -webkit-text-stroke: 1px var(--t
   .tree button::before { display: none; }
   .tree button.on { border-bottom-color: var(--accent); }
   .vp-tag { top: 56px; left: 16px; font-size: 11px; }
-  .content, .content.is-compact, .content.st-top {
+  .content, .content.is-compact, .content.st-top, .content.st-contact {
     left: 0; right: 0; width: auto; top: auto; bottom: var(--bar);
     max-height: 54vh; justify-content: flex-start; gap: 16px;
     padding: 28px 16px 24px;
@@ -233,30 +252,14 @@ h2 em { font-style: normal; color: transparent; -webkit-text-stroke: 1px var(--t
   .list-m { display: grid; gap: 8px; }
   .list-m a { border: 1px solid var(--line); background: var(--panel); padding: 10px 14px; }
   .list-m small { display: block; font-family: var(--mono); font-size: 11px; color: var(--accent); }
-  .pager { display: none; } /* на телефоне листают свайпом или верхним меню */
-  .status .hide-m { display: none; }
+  .pager { display: none; }
+  .ui::before { display: none; } /* на телефоне листают свайпом или верхним меню */
 }
 
 @media (prefers-reduced-motion: reduce) {
   .content { animation-duration: .01s; }
   .btn, .btn:hover { transition: none; transform: none; }
 }
-
-/* Письмо из конверта (HTML на бумаге в 3D) */
-.letter {
-  width: 348px; height: 216px; padding: 18px 22px; color: #1b1e22;
-  display: flex; flex-direction: column; gap: 6px; font-family: var(--sans);
-  opacity: 0; position: relative;
-}
-.letter small { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #6b7078; }
-.letter b { font-size: 22px; letter-spacing: -.02em; line-height: 1.15; }
-.letter p { font-size: 13.5px; color: #4a4f57; }
-.letter a {
-  margin-top: auto; align-self: flex-start; font-family: var(--mono); font-size: 12px;
-  background: var(--accent); color: var(--ink); padding: 7px 12px; font-weight: 700;
-}
-.letter a:hover { background: var(--ink); color: var(--accent); }
-.letter i { position: absolute; right: 22px; bottom: 22px; font-size: 12px; color: #6b7078; }
 
 /* Реплика воксельной фигурки */
 .bubble {

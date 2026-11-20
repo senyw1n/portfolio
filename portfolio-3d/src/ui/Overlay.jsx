@@ -1,6 +1,8 @@
 import { STATIONS } from '../data'
 import { useLang, useT, setLang } from '../i18n'
+import { useState } from 'react'
 import Rich from './Rich'
+import Icon from './Icon'
 
 const pad = (n) => String(n).padStart(2, '0')
 
@@ -98,18 +100,41 @@ function PathPanel({ t }) {
 }
 
 function ContactPanel({ t }) {
+  const c = t.contact
+  const [copied, setCopied] = useState(false)
+  const email = c.links.find((l) => l.icon === 'mail').value
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(email)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2200)
+    } catch {
+      location.href = `mailto:${email}`
+    }
+  }
   return (
-    <div className="render">
-      <h2><Rich text={t.contact.title} /></h2>
-      <div className="links">
-        {t.contact.links.map((c) => (
-          <a key={c.href} href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
-            <small>{c.label}</small>
-            <b>{c.value}</b>
+    <div className="contact">
+      <span className="avail"><i />{c.status}</span>
+      <h2><Rich text={c.title} /></h2>
+      <p className="lead"><Rich text={c.lead} /></p>
+      <div className="btns">
+        <a className="btn go" href={c.links[0].href} target="_blank" rel="noopener">
+          <Icon name="tg" size={16} />{c.cta}
+        </a>
+        <button className={`btn ${copied ? 'ok' : ''}`} onClick={copy} aria-live="polite">
+          <Icon name="copy" size={16} />{copied ? c.copied : c.copy}
+        </button>
+      </div>
+      <div className="clist">
+        {c.links.map((l) => (
+          <a key={l.href} href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
+            <span className="ic"><Icon name={l.icon} /></span>
+            <span className="tx"><small>{l.label}</small><b>{l.value}</b></span>
+            <span className="ar"><Icon name="arrow" size={16} /></span>
           </a>
         ))}
       </div>
-      <div className="foot">© {new Date().getFullYear()} Sayat Zhaksybay</div>
+      <div className="foot">© {new Date().getFullYear()} Sayat Zhaksybay · {c.foot}</div>
     </div>
   )
 }

@@ -9,7 +9,7 @@ export const STATIONS = [
   { id: 'skills', w: 8.2, h: 3.4, cy: 1.4, layout: 'side' },
   { id: 'work', w: 10.8, h: 4.2, cy: 1.7, layout: 'compact' },
   { id: 'path', w: 8.4, h: 4.0, cy: 1.9, layout: 'side' },
-  { id: 'contact', w: 4.4, h: 4.6, cy: 2.3, layout: 'side' },
+  { id: 'contact', w: 5.2, h: 4.6, cy: 2.3, layout: 'side', panel: 540 },
 ]
 
 const FIGMA = {
@@ -90,20 +90,20 @@ const ru = {
     ],
   },
   contact: {
-    title: 'Для __сотрудничества__',
+    status: 'Открыт к предложениям',
+    title: 'Давайте __поработаем__ вместе',
+    lead: 'Ищу первую позицию **UX/UI-дизайнера** — полная занятость, Алматы. Напишите, буду рад обсудить задачу.',
+    cta: 'Написать в Telegram',
+    copy: 'Скопировать почту',
+    copied: 'Почта скопирована ✓',
     links: [
-      { label: 'Telegram', value: '@senyw1n', href: TG },
-      { label: 'LinkedIn', value: 'Sayat Zhaksybay', href: LINKEDIN },
-      { label: 'Почта', value: 'zhaksybay009@mail.ru', href: 'mailto:zhaksybay009@mail.ru' },
-      { label: 'Телефон', value: '+7 (707) 255-80-27', href: 'tel:+77072558027' },
+      { icon: 'tg', label: 'Telegram', value: '@senyw1n', href: TG },
+      { icon: 'in', label: 'LinkedIn', value: 'Sayat Zhaksybay', href: LINKEDIN },
+      { icon: 'mail', label: 'Почта', value: 'zhaksybay009@mail.ru', href: 'mailto:zhaksybay009@mail.ru' },
+      { icon: 'phone', label: 'Телефон', value: '+7 (707) 255-80-27', href: 'tel:+77072558027' },
     ],
-    inbox: 'Входящие · 1 новое',
-    letter: {
-      kicker: 'Новое письмо',
-      title: 'Открыт к сотрудничеству',
-      text: 'UX/UI и веб-дизайн. Полная занятость, Алматы.',
-      cta: 'Написать в Telegram ↗',
-    },
+    foot: 'Алматы · UTC+5',
+    city: 'Алматы',
   },
 }
 
@@ -177,20 +177,20 @@ const en = {
     ],
   },
   contact: {
-    title: 'Let’s __collaborate__',
+    status: 'Open to work',
+    title: 'Let’s work __together__',
+    lead: 'I’m looking for my first **UX/UI designer** role — full-time, Almaty. Drop me a message, I’d be glad to talk about your project.',
+    cta: 'Message on Telegram',
+    copy: 'Copy email',
+    copied: 'Email copied ✓',
     links: [
-      { label: 'Telegram', value: '@senyw1n', href: TG },
-      { label: 'LinkedIn', value: 'Sayat Zhaksybay', href: LINKEDIN },
-      { label: 'Email', value: 'zhaksybay009@mail.ru', href: 'mailto:zhaksybay009@mail.ru' },
-      { label: 'Phone', value: '+7 (707) 255-80-27', href: 'tel:+77072558027' },
+      { icon: 'tg', label: 'Telegram', value: '@senyw1n', href: TG },
+      { icon: 'in', label: 'LinkedIn', value: 'Sayat Zhaksybay', href: LINKEDIN },
+      { icon: 'mail', label: 'Email', value: 'zhaksybay009@mail.ru', href: 'mailto:zhaksybay009@mail.ru' },
+      { icon: 'phone', label: 'Phone', value: '+7 (707) 255-80-27', href: 'tel:+77072558027' },
     ],
-    inbox: 'Inbox · 1 new',
-    letter: {
-      kicker: 'New message',
-      title: 'Open to collaboration',
-      text: 'UX/UI and web design. Full-time, Almaty.',
-      cta: 'Message on Telegram ↗',
-    },
+    foot: 'Almaty · UTC+5',
+    city: 'Almaty',
   },
 }
 
