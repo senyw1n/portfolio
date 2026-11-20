@@ -37,7 +37,7 @@ const ru = {
   },
   about: {
     title: 'Интерфейсы, __понятные__ людям',
-    lead: 'Выпускник **Narxoz** по направлению «Цифровой менеджмент и дизайн». Занимаюсь **UX/UI и веб-дизайном**: разбираюсь в задаче, продумываю сценарии, собираю вайрфреймы и прототипы в Figma. Понимаю техническую сторону продукта — базы данных, PostgreSQL, API, Postman — поэтому говорю с разработчиками на одном языке.',
+    lead: 'В 2025 году окончил **Narxoz** по направлению «Цифровой менеджмент и дизайн». Занимаюсь **UX/UI и веб-дизайном**: разбираюсь в задаче, продумываю сценарии, собираю вайрфреймы и прототипы в Figma. Сейчас работаю в **технической поддержке** — каждый день вижу продукт глазами пользователей и разработчиков, поэтому знаю, где интерфейс мешает людям, и говорю с командой на одном языке.',
     panel: 'Свойства объекта',
     props: [
       ['Имя', 'Sayat Zhaksybay'],
@@ -45,7 +45,7 @@ const ru = {
       ['Образование', 'Narxoz, 2025'],
       ['Занятость', 'Полная, в офисе'],
     ],
-    status: ['Статус', '● Ищу работу'],
+    status: ['Статус', '● Открыт к предложениям'],
     tag: 'Sayat_Zhaksybay · нажми на меня',
     phrases: [
       'Привет! Я Саят 👋',
@@ -83,15 +83,15 @@ const ru = {
   path: {
     title: 'Ключевые __кадры__',
     items: [
-      { when: '2025', title: 'Narxoz', text: 'Высшее образование, направление «Цифровой менеджмент и дизайн».' },
-      { when: 'Стажировка', title: '3D-моделирование — Seneca Partners', text: 'Работал с моделями и сценами в 3ds Max.' },
-      { when: 'Сейчас', title: 'Ищу первую постоянную работу', text: 'Полная занятость, в офисе. UX/UI и веб-дизайн.', now: true },
+      { when: 'Учебная практика', title: 'Seneca Partners — 3D-визуализация ЖК', text: 'Задача — 3D-модели одного жилого комплекса: смоделировал квартиры, мебель и предметы интерьера в 3ds Max.' },
+      { when: '2025', title: 'Окончил Narxoz', text: 'Высшее образование по направлению «Цифровой менеджмент и дизайн».' },
+      { when: 'Сейчас', title: 'Специалист технической поддержки', text: 'Разбираю сложные обращения пользователей: воспроизвожу проблему, проверяю кейс на техническую ошибку и передаю разработчикам с понятным описанием и шагами воспроизведения. Каждый день вижу, где пользователи спотыкаются об интерфейс и что мешает команде быстро это исправить.', now: true },
     ],
   },
   contact: {
     status: 'Открыт к предложениям',
     title: 'На __связи__',
-    lead: 'Ищу первую позицию **UX/UI-дизайнера** на полную занятость. Напишите, буду рад обсудить задачу.',
+    lead: 'Открыт к предложениям на позицию **UX/UI-дизайнера**, полная занятость. Напишите, буду рад обсудить задачу.',
     cta: 'Написать в Telegram',
     copy: 'Скопировать почту',
     copied: 'Почта скопирована ✓',
@@ -122,7 +122,7 @@ const en = {
   },
   about: {
     title: 'Interfaces __people__ understand',
-    lead: 'Graduate of **Narxoz University**, Digital Management and Design. I work in **UX/UI and web design**: I dig into the problem, map user flows, and build wireframes and prototypes in Figma. I also understand the technical side — databases, PostgreSQL, APIs, Postman — so I speak the same language as developers.',
+    lead: 'I graduated from **Narxoz University** in 2025 (Digital Management and Design). I work in **UX/UI and web design**: I dig into the problem, map user flows, and build wireframes and prototypes in Figma. Today I work in **technical support** — every day I see the product through the eyes of users and developers, so I know where an interface gets in people’s way and speak the team’s language.',
     panel: 'Object properties',
     props: [
       ['Name', 'Sayat Zhaksybay'],
@@ -130,7 +130,7 @@ const en = {
       ['Education', 'Narxoz, 2025'],
       ['Employment', 'Full-time, on-site'],
     ],
-    status: ['Status', '● Open to work'],
+    status: ['Status', '● Open to offers'],
     tag: 'Sayat_Zhaksybay · click me',
     phrases: [
       'Hi! I’m Sayat 👋',
@@ -168,15 +168,15 @@ const en = {
   path: {
     title: 'Key __frames__',
     items: [
-      { when: '2025', title: 'Narxoz University', text: 'Bachelor’s degree in Digital Management and Design.' },
-      { when: 'Internship', title: '3D modeling — Seneca Partners', text: 'Worked on models and scenes in 3ds Max.' },
-      { when: 'Now', title: 'Looking for my first full-time role', text: 'Full-time, on-site. UX/UI and web design.', now: true },
+      { when: 'Internship', title: 'Seneca Partners — residential 3D', text: 'The task: 3D models for a single residential complex — I modeled the apartments, furniture and interior details in 3ds Max.' },
+      { when: '2025', title: 'Graduated from Narxoz', text: 'Bachelor’s degree in Digital Management and Design.' },
+      { when: 'Now', title: 'Technical Support Specialist', text: 'I investigate complex user issues: reproduce the problem, check whether it’s a technical bug, and hand it off to developers with a clear description and steps to reproduce. Every day I see where users get stuck in an interface and what keeps the team from fixing it fast.', now: true },
     ],
   },
   contact: {
     status: 'Open to work',
     title: 'Let’s __connect__',
-    lead: 'I’m looking for my first **UX/UI designer** role, full-time. Drop me a message, I’d be glad to talk about your project.',
+    lead: 'Open to **UX/UI designer** roles, full-time. Drop me a message, I’d be glad to talk about your project.',
     cta: 'Message on Telegram',
     copy: 'Copy email',
     copied: 'Email copied ✓',
