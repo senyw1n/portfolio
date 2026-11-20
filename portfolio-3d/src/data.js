@@ -18,6 +18,7 @@ const FIGMA = {
   coffee: 'https://www.figma.com/design/Ra4juISp0416V8mUSb1iNY/Untitled?node-id=2-10',
 }
 const TG = 'https://t.me/senyw1n'
+const LINKEDIN = 'https://www.linkedin.com/in/sayat-zhaksybay-345513437/'
 
 const ru = {
   meta: { title: 'Sayat Zhaksybay — UX/UI-дизайнер' },
@@ -92,6 +93,7 @@ const ru = {
     title: 'Для __сотрудничества__',
     links: [
       { label: 'Telegram', value: '@senyw1n', href: TG },
+      { label: 'LinkedIn', value: 'Sayat Zhaksybay', href: LINKEDIN },
       { label: 'Почта', value: 'zhaksybay009@mail.ru', href: 'mailto:zhaksybay009@mail.ru' },
       { label: 'Телефон', value: '+7 (707) 255-80-27', href: 'tel:+77072558027' },
     ],
@@ -178,6 +180,7 @@ const en = {
     title: 'Let’s __collaborate__',
     links: [
       { label: 'Telegram', value: '@senyw1n', href: TG },
+      { label: 'LinkedIn', value: 'Sayat Zhaksybay', href: LINKEDIN },
       { label: 'Email', value: 'zhaksybay009@mail.ru', href: 'mailto:zhaksybay009@mail.ru' },
       { label: 'Phone', value: '+7 (707) 255-80-27', href: 'tel:+77072558027' },
     ],
