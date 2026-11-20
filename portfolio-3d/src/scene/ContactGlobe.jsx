@@ -73,7 +73,7 @@ export default function ContactGlobe({ on }) {
     [marker]
   )
   const orbitLine = useMemo(() => Array.from({ length: 97 }, (_, i) => orbitPoint((i / 96) * Math.PI * 2)), [])
-  const angle = useRef(-0.6)
+  const angle = useRef(2.2) // старт слева-спереди, чтобы самолётик сразу было видно
   const tmpA = useMemo(() => new THREE.Vector3(), [])
   const tmpB = useMemo(() => new THREE.Vector3(), [])
 
@@ -85,7 +85,8 @@ export default function ContactGlobe({ on }) {
     globe.current.rotation.x += (0.32 - s.pointer.y * 0.2 - globe.current.rotation.x) * k
 
     // Самолётик летит по орбите и смотрит по направлению полёта
-    if (!REDUCED) angle.current += dt * 0.55
+    // Самолётик летает всегда (медленно и плавно), даже при «уменьшении движения» в системе
+    angle.current += dt * (REDUCED ? 0.35 : 0.55)
     orbitPoint(angle.current, tmpA)
     orbitPoint(angle.current + 0.05, tmpB)
     plane.current.position.copy(tmpA)
