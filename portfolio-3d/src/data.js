@@ -67,6 +67,7 @@ const ru = {
     langs: [
       ['Казахский', 'родной'],
       ['Русский', 'B2'],
+      ['Английский', 'B1 (в процессе улучшения)'],
     ],
   },
   work: {
@@ -151,6 +152,7 @@ const en = {
     langs: [
       ['Kazakh', 'native'],
       ['Russian', 'B2'],
+      ['English', 'B1 (improving)'],
     ],
   },
   work: {
