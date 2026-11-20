@@ -91,7 +91,7 @@ const ru = {
   },
   contact: {
     status: 'Открыт к предложениям',
-    title: 'Давайте __поработаем__ вместе',
+    title: 'На __связи__',
     lead: 'Ищу первую позицию **UX/UI-дизайнера** — полная занятость, Алматы. Напишите, буду рад обсудить задачу.',
     cta: 'Написать в Telegram',
     copy: 'Скопировать почту',
@@ -178,7 +178,7 @@ const en = {
   },
   contact: {
     status: 'Open to work',
-    title: 'Let’s work __together__',
+    title: 'Let’s __connect__',
     lead: 'I’m looking for my first **UX/UI designer** role — full-time, Almaty. Drop me a message, I’d be glad to talk about your project.',
     cta: 'Message on Telegram',
     copy: 'Copy email',

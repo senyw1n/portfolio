@@ -121,6 +121,9 @@ function ContactPanel({ t }) {
         <a className="btn go" href={c.links[0].href} target="_blank" rel="noopener">
           <Icon name="tg" size={16} />{c.cta}
         </a>
+        <a className="btn" href={c.links[1].href} target="_blank" rel="noopener">
+          <Icon name="in" size={16} />LinkedIn
+        </a>
         <button className={`btn ${copied ? 'ok' : ''}`} onClick={copy} aria-live="polite">
           <Icon name="copy" size={16} />{copied ? c.copied : c.copy}
         </button>
