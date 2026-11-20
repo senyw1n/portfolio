@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { Edges, Html } from '@react-three/drei'
 import * as THREE from 'three'
 import { ACCENT, REDUCED } from './layout'
+import { useT } from '../i18n'
 
 /* ── 05 Контакты: конверт открывается, из него выезжает письмо ── */
 const W = 3.2 // ширина конверта
@@ -24,6 +25,7 @@ function shapeGeo(points) {
 }
 
 export default function Envelope({ on }) {
+  const L = useT().contact.letter
   const root = useRef()
   const flap = useRef()
   const letter = useRef()
@@ -74,10 +76,10 @@ export default function Envelope({ on }) {
         </mesh>
         <Html transform position={[0, 0, 0.012]} distanceFactor={400 / 120} zIndexRange={[5, 0]}>
           <div className="letter" ref={card}>
-            <small>Новое письмо</small>
-            <b>Открыт к сотрудничеству</b>
-            <p>UX/UI и веб-дизайн. Полная занятость, Алматы.</p>
-            <a href="https://t.me/senyw1n" target="_blank" rel="noopener">Написать в Telegram ↗</a>
+            <small>{L.kicker}</small>
+            <b>{L.title}</b>
+            <p>{L.text}</p>
+            <a href="https://t.me/senyw1n" target="_blank" rel="noopener">{L.cta}</a>
             <i>— Sayat Zhaksybay</i>
           </div>
         </Html>

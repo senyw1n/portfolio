@@ -4,6 +4,10 @@ import { STATIONS } from './data'
 import { FOV } from './scene/layout'
 import Scene from './scene/Scene'
 import Overlay from './ui/Overlay'
+import { Analytics } from '@vercel/analytics/react'
+
+// Убираем экран загрузки из index.html, когда сцена отрисовала первый кадр
+const hideBoot = () => requestAnimationFrame(() => requestAnimationFrame(() => window.__bootDone?.()))
 
 const LAST = STATIONS.length - 1
 const clamp = (i) => Math.max(0, Math.min(LAST, i))
@@ -74,13 +78,14 @@ export default function App() {
   return (
     <>
       <div className="stage">
-        <Canvas dpr={[1, 2]} camera={{ fov: FOV, position: [0, 7, 22], near: 0.1, far: 220 }}>
+        <Canvas dpr={[1, 2]} camera={{ fov: FOV, position: [0, 7, 22], near: 0.1, far: 220 }} onCreated={hideBoot}>
           <Suspense fallback={null}>
             <Scene active={active} onSelect={go} />
           </Suspense>
         </Canvas>
       </div>
       <Overlay active={active} go={go} />
+      <Analytics />
     </>
   )
 }

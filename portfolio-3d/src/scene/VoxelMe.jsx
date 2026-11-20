@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { Html, useCursor } from '@react-three/drei'
 import * as THREE from 'three'
 import { REDUCED } from './layout'
+import { useT } from '../i18n'
 
 /* Воксельный портрет в стиле блочного персонажа (по присланной картинке):
    большая голова 8×8×8 с объёмной кудрявой причёской, тёмно-синяя куртка
@@ -111,13 +112,6 @@ export const VOXEL = 0.1
 export const VOXEL_HEIGHT = 37 * VOXEL
 const PIVOT = [6, 26] // плечо правой руки, в вокселях
 
-const PHRASES = [
-  'Привет! Я Саят 👋',
-  'Ищу команду — давай работать вместе!',
-  'Люблю, когда интерфейс понятен с первого клика',
-  'Кликни ещё раз 🙂',
-  'Пиши в Telegram: @senyw1n',
-]
 
 /* Набор вокселей одним InstancedMesh; offset — сдвиг в вокселях (для руки от плеча) */
 const ZERO = [0, 0]
@@ -147,6 +141,7 @@ function Voxels({ list, size, offset = ZERO, ...props }) {
    При входе в раздел здоровается сама (если анимации в системе не выключены). */
 export default function VoxelMe({ size = VOXEL, on = true }) {
   const parts = useMemo(build, [])
+  const PHRASES = useT().about.phrases
   const arm = useRef()
   const hand = useRef()
   const wave = useRef(0) // сколько секунд ещё махать

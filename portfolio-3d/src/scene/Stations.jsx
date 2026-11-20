@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Edges, Html, Line, useCursor } from '@react-three/drei'
 import * as THREE from 'three'
-import { SKILLS, PROJECTS, EXPERIENCE } from '../data'
+import { useT } from '../i18n'
 import { ACCENT, REDUCED } from './layout'
 import VoxelMe, { VOXEL_HEIGHT } from './VoxelMe'
 import Envelope from './Envelope'
@@ -13,6 +13,7 @@ const TEXT = '#e8e9e4'
 
 /* ── 05 Контакты: конверт с письмом ── */
 export function Contact({ on }) {
+  const t = useT()
   return (
     <group>
       <Envelope on={on} />
@@ -20,7 +21,7 @@ export function Contact({ on }) {
         <circleGeometry args={[1.6, 48]} />
         <meshBasicMaterial color="#000" transparent opacity={0.3} />
       </mesh>
-      <Label on={on} position={[0, 4.5, 0]} className="tag">Входящие · 1 новое</Label>
+      <Label on={on} position={[0, 4.5, 0]} className="tag">{t.contact.inbox}</Label>
     </group>
   )
 }
@@ -108,6 +109,7 @@ export function Hero({ on }) {
 
 /* ── 01 Обо мне: воксельный портрет — выделенный объект «я» ── */
 export function About({ on }) {
+  const t = useT()
   const g = useRef()
   const spin = useRef(0)
   // Медленно поворачивается туда-сюда и следит за мышью — лицо всегда к зрителю
@@ -130,7 +132,7 @@ export function About({ on }) {
         <ringGeometry args={[0.85, 0.9, 48]} />
         <meshBasicMaterial color={ACCENT} transparent opacity={0.6} />
       </mesh>
-      <Label on={on} position={[0, h + 0.5, 0]} className="tag">Sayat_Zhaksybay · нажми на меня</Label>
+      <Label on={on} position={[0, h + 0.5, 0]} className="tag">{t.about.tag}</Label>
     </group>
   )
 }
@@ -158,6 +160,7 @@ function Slab({ y, label, on, mobile }) {
 }
 
 export function Skills({ on, mobile }) {
+  const SKILLS = useT().skills.groups
   const g = useRef()
   useFrame((s, dt) => {
     const k = Math.min(1, dt * 3)
@@ -166,7 +169,7 @@ export function Skills({ on, mobile }) {
   return (
     <group ref={g}>
       {SKILLS.map((grp, gi) => (
-        <group key={grp.group} position={[(gi - 1) * 2.85, 0, 0]}>
+        <group key={gi} position={[(gi - 1) * 2.85, 0, 0]}>
           {grp.items.map((it, i) => (
             <Slab key={it} y={0.22 + i * 0.44} label={it} on={on} mobile={mobile} />
           ))}
@@ -181,6 +184,7 @@ export function Skills({ on, mobile }) {
 
 /* ── 03 Проекты: мониторы с работами ── */
 function Monitor({ p, i, x, on, mobile }) {
+  const t = useT()
   const [hov, setHov] = useState(false)
   useCursor(hov)
   const open = () => window.open(p.url, '_blank', 'noopener')
@@ -215,7 +219,7 @@ function Monitor({ p, i, x, on, mobile }) {
             <small>{p.tag}</small>
             <b>{p.title}</b>
             <p>{p.desc}</p>
-            <em>Открыть в Figma ↗</em>
+            <em>{t.work.open}</em>
           </a>
         </Html>
       )}
@@ -230,10 +234,11 @@ function Monitor({ p, i, x, on, mobile }) {
 }
 
 export function Work({ on, mobile }) {
+  const PROJECTS = useT().work.projects
   return (
     <group>
       {PROJECTS.map((p, i) => (
-        <Monitor key={p.title} p={p} i={i} x={(i - (PROJECTS.length - 1) / 2) * 3.65} on={on} mobile={mobile} />
+        <Monitor key={p.url} p={p} i={i} x={(i - (PROJECTS.length - 1) / 2) * 3.65} on={on} mobile={mobile} />
       ))}
     </group>
   )
@@ -264,6 +269,7 @@ function Key({ pos, item, on }) {
 }
 
 export function Path({ on }) {
+  const EXPERIENCE = useT().path.items
   const keys = EXPERIENCE.map((e, i) => [(i - 1) * 3.2, 0.9 + i * 1.15, 0])
   const g = useRef()
   useFrame((s, dt) => {
@@ -281,7 +287,7 @@ export function Path({ on }) {
         gapSize={0.12}
       />
       {EXPERIENCE.map((e, i) => (
-        <Key key={e.title} pos={keys[i]} item={e} on={on} />
+        <Key key={i} pos={keys[i]} item={e} on={on} />
       ))}
     </group>
   )

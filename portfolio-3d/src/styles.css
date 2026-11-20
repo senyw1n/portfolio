@@ -40,9 +40,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   letter-spacing: .08em; text-transform: uppercase; font-size: 11px;
   display: flex; justify-content: space-between;
 }
-.file { padding: 16px; border-bottom: 1px solid var(--line); }
+.file { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .file b { display: block; color: var(--accent); font-weight: 400; }
-.file span { color: var(--muted); font-size: 12px; }
+.file > span { color: var(--muted); font-size: 12px; }
+.lang { display: flex; border: 1px solid var(--line); }
+.lang button { padding: 4px 9px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.lang button + button { border-left: 1px solid var(--line); }
+.lang button:hover { color: var(--text); }
+.lang button.on { background: var(--accent); color: var(--ink); }
 .tree { padding: 10px 0; flex: 1; overflow: auto; display: flex; flex-direction: column; }
 .tree button {
   display: flex; align-items: center; gap: 10px; text-align: left;
@@ -209,7 +214,8 @@ h2 em { font-style: normal; color: transparent; -webkit-text-stroke: 1px var(--t
 /* ── Телефон и узкие экраны ── */
 @media (max-width: 899px) {
   .side { inset: 0 0 auto 0; width: auto; height: 46px; flex-direction: row; border-right: 0; border-bottom: 1px solid var(--line); }
-  .side-head, .file, .gizmo, .hint { display: none; }
+  .side-head, .gizmo, .hint, .file > span { display: none; }
+  .file { position: fixed; top: 52px; right: 12px; padding: 0; border: 0; background: rgba(23, 25, 28, .92); }
   .tree { flex-direction: row; padding: 0; overflow-x: auto; scrollbar-width: none; }
   .tree button { padding: 0 14px; height: 46px; border-left: 0; border-bottom: 2px solid transparent; white-space: nowrap; }
   .tree button::before { display: none; }

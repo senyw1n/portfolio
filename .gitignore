@@ -4,3 +4,4 @@ dist/
 .impeccable/
 .claude/
 *.log
+.playwright-mcp/
