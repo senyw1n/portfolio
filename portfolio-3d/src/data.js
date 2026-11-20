@@ -94,6 +94,7 @@ const ru = {
     cta: 'Написать в Telegram',
     copy: 'Скопировать почту',
     copied: 'Почта скопирована ✓',
+    city: 'Алматы',
     links: [
       { icon: 'tg', label: 'Telegram', value: '@senyw1n', href: TG },
       { icon: 'in', label: 'LinkedIn', value: 'Sayat Zhaksybay', href: LINKEDIN },
@@ -177,6 +178,7 @@ const en = {
     cta: 'Message on Telegram',
     copy: 'Copy email',
     copied: 'Email copied ✓',
+    city: 'Almaty',
     links: [
       { icon: 'tg', label: 'Telegram', value: '@senyw1n', href: TG },
       { icon: 'in', label: 'LinkedIn', value: 'Sayat Zhaksybay', href: LINKEDIN },

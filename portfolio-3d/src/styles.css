@@ -275,3 +275,6 @@ h2 em { font-style: normal; color: transparent; -webkit-text-stroke: 1px var(--t
   content: ""; position: absolute; left: -7px; bottom: 8px;
   border: 7px solid transparent; border-right-color: var(--text); border-left: 0;
 }
+
+/* Подпись города на глобусе */
+.lbl.city { color: var(--ink); background: var(--accent); padding: 3px 8px; }

@@ -12,8 +12,8 @@ const LINE = '#3a4048'
 const TEXT = '#e8e9e4'
 
 /* ── 05 Контакты: глобус и самолётик (см. ContactGlobe.jsx) ── */
-export function Contact() {
-  return <ContactGlobe />
+export function Contact({ on }) {
+  return <ContactGlobe on={on} />
 }
 
 /* Плавное вращение: само по себе (если анимации разрешены) + за мышью */
