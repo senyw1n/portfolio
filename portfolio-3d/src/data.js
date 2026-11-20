@@ -24,7 +24,6 @@ const ru = {
   meta: { title: 'Sayat Zhaksybay — UX/UI-дизайнер' },
   names: ['00_Главная', '01_Обо_мне', '02_Навыки', '03_Проекты', '04_Опыт', '05_Контакты'],
   ui: {
-    city: 'Алматы · 2026',
     sections: 'Разделы',
     viewport: ['Перспектива', 'Каркас'],
     prev: 'Предыдущий объект',
@@ -33,7 +32,7 @@ const ru = {
   },
   hero: {
     roles: ['UX / UI', 'Web Design', 'Figma'],
-    lead: 'UX/UI-дизайнер из **Алматы**. Проектирую понятные интерфейсы в Figma — от пользовательских сценариев и вайрфреймов до готовых экранов и прототипов.',
+    lead: 'Проектирую понятные интерфейсы в **Figma** — от пользовательских сценариев и вайрфреймов до готовых экранов и прототипов.',
     cta: 'Смотреть проекты →',
   },
   about: {
@@ -43,7 +42,6 @@ const ru = {
     props: [
       ['Имя', 'Sayat Zhaksybay'],
       ['Позиция', 'Junior UX/UI-дизайнер'],
-      ['Город', 'Алматы, Казахстан'],
       ['Образование', 'Narxoz, 2025'],
       ['Занятость', 'Полная, в офисе'],
     ],
@@ -86,13 +84,13 @@ const ru = {
     items: [
       { when: '2025', title: 'Narxoz', text: 'Высшее образование, направление «Цифровой менеджмент и дизайн».' },
       { when: 'Стажировка', title: '3D-моделирование — Seneca Partners', text: 'Работал с моделями и сценами в 3ds Max.' },
-      { when: 'Сейчас', title: 'Ищу первую постоянную работу', text: 'Полная занятость в Алматы, в офисе. UX/UI и веб-дизайн.', now: true },
+      { when: 'Сейчас', title: 'Ищу первую постоянную работу', text: 'Полная занятость, в офисе. UX/UI и веб-дизайн.', now: true },
     ],
   },
   contact: {
     status: 'Открыт к предложениям',
     title: 'На __связи__',
-    lead: 'Ищу первую позицию **UX/UI-дизайнера** — полная занятость, Алматы. Напишите, буду рад обсудить задачу.',
+    lead: 'Ищу первую позицию **UX/UI-дизайнера** на полную занятость. Напишите, буду рад обсудить задачу.',
     cta: 'Написать в Telegram',
     copy: 'Скопировать почту',
     copied: 'Почта скопирована ✓',
@@ -102,8 +100,6 @@ const ru = {
       { icon: 'mail', label: 'Почта', value: 'zhaksybay009@mail.ru', href: 'mailto:zhaksybay009@mail.ru' },
       { icon: 'phone', label: 'Телефон', value: '+7 (707) 255-80-27', href: 'tel:+77072558027' },
     ],
-    foot: 'Алматы · UTC+5',
-    city: 'Алматы',
   },
 }
 
@@ -111,7 +107,6 @@ const en = {
   meta: { title: 'Sayat Zhaksybay — UX/UI Designer' },
   names: ['00_Home', '01_About', '02_Skills', '03_Projects', '04_Experience', '05_Contact'],
   ui: {
-    city: 'Almaty · 2026',
     sections: 'Sections',
     viewport: ['Perspective', 'Wireframe'],
     prev: 'Previous object',
@@ -120,7 +115,7 @@ const en = {
   },
   hero: {
     roles: ['UX / UI', 'Web Design', 'Figma'],
-    lead: 'UX/UI designer based in **Almaty**. I design clear interfaces in Figma — from user flows and wireframes to polished screens and prototypes.',
+    lead: 'I design clear interfaces in **Figma** — from user flows and wireframes to polished screens and prototypes.',
     cta: 'View projects →',
   },
   about: {
@@ -130,7 +125,6 @@ const en = {
     props: [
       ['Name', 'Sayat Zhaksybay'],
       ['Role', 'Junior UX/UI Designer'],
-      ['City', 'Almaty, Kazakhstan'],
       ['Education', 'Narxoz, 2025'],
       ['Employment', 'Full-time, on-site'],
     ],
@@ -173,13 +167,13 @@ const en = {
     items: [
       { when: '2025', title: 'Narxoz University', text: 'Bachelor’s degree in Digital Management and Design.' },
       { when: 'Internship', title: '3D modeling — Seneca Partners', text: 'Worked on models and scenes in 3ds Max.' },
-      { when: 'Now', title: 'Looking for my first full-time role', text: 'Full-time, on-site in Almaty. UX/UI and web design.', now: true },
+      { when: 'Now', title: 'Looking for my first full-time role', text: 'Full-time, on-site. UX/UI and web design.', now: true },
     ],
   },
   contact: {
     status: 'Open to work',
     title: 'Let’s __connect__',
-    lead: 'I’m looking for my first **UX/UI designer** role — full-time, Almaty. Drop me a message, I’d be glad to talk about your project.',
+    lead: 'I’m looking for my first **UX/UI designer** role, full-time. Drop me a message, I’d be glad to talk about your project.',
     cta: 'Message on Telegram',
     copy: 'Copy email',
     copied: 'Email copied ✓',
@@ -189,8 +183,6 @@ const en = {
       { icon: 'mail', label: 'Email', value: 'zhaksybay009@mail.ru', href: 'mailto:zhaksybay009@mail.ru' },
       { icon: 'phone', label: 'Phone', value: '+7 (707) 255-80-27', href: 'tel:+77072558027' },
     ],
-    foot: 'Almaty · UTC+5',
-    city: 'Almaty',
   },
 }
 

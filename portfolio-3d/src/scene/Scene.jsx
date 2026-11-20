@@ -25,7 +25,7 @@ function CameraRig({ active }) {
     goalLook.current.set(x, y, 0)
     goalPos.current.set(x + state.pointer.x * 0.7, y + 1.3 + state.pointer.y * 0.4, L.dist)
 
-    const k = 1 - Math.exp(-Math.min(dt, 0.05) * (REDUCED ? 7 : 2.6))
+    const k = 1 - Math.exp(-Math.min(dt, 0.05) * (REDUCED ? 3 : 2.6)) // плавный перелёт камеры (и при «меньше движения» тоже)
     state.camera.position.lerp(goalPos.current, k)
     look.current.lerp(goalLook.current, k)
     state.camera.lookAt(look.current)

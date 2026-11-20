@@ -1,11 +1,10 @@
 import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { Html, Line } from '@react-three/drei'
+import { Line } from '@react-three/drei'
 import * as THREE from 'three'
 import { ACCENT, REDUCED } from './layout'
-import { useT } from '../i18n'
 
-/* ── 05 Контакты: каркасный глобус с точкой Алматы и бумажным самолётиком на орбите ── */
+/* ── 05 Контакты: каркасный глобус со светящейся точкой и бумажным самолётиком на орбите ── */
 const R = 1.45 // радиус глобуса
 const CENTER = [0, 2.3, 0]
 const ORBIT = 2.25 // радиус орбиты самолётика
@@ -58,8 +57,7 @@ const look = new THREE.Matrix4()
 const orbitPoint = (a, out = new THREE.Vector3()) =>
   out.set(Math.cos(a) * ORBIT, 0, Math.sin(a) * ORBIT).applyAxisAngle(new THREE.Vector3(1, 0, 0), TILT)
 
-export default function ContactGlobe({ on }) {
-  const t = useT()
+export default function ContactGlobe() {
   const globe = useRef()
   const plane = useRef()
   const pulse = useRef()
@@ -121,10 +119,6 @@ export default function ContactGlobe({ on }) {
             <ringGeometry args={[0.1, 0.13, 32]} />
             <meshBasicMaterial color={ACCENT} transparent toneMapped={false} side={THREE.DoubleSide} depthWrite={false} />
           </mesh>
-          <Line points={[[0, 0, 0], [0, 0, 0.45]]} color="#ffffff" lineWidth={1.2} />
-          <Html position={[0, 0, 0.55]} center zIndexRange={[5, 0]}>
-            <div className={`lbl city ${on ? 'on' : ''}`}>{t.contact.city} · UTC+5</div>
-          </Html>
         </group>
       </group>
 

@@ -83,8 +83,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
   <text x="58" y="232" font-family="Segoe UI" font-weight="700" font-size="128" letter-spacing="-6" fill="none" stroke="#e8e9e4" stroke-width="2">SAYAT</text>
   <text x="58" y="350" font-family="Segoe UI" font-weight="700" font-size="128" letter-spacing="-6" fill="${ACCENT}">ZHAKSYBAY</text>
   ${chip(64, 'UX / UI', true)}${chip(186, 'Web Design', false)}${chip(342, 'Figma', false)}
-  <text x="64" y="500" font-family="Segoe UI" font-size="28" fill="#e8e9e4">UX/UI-дизайнер · Алматы</text>
-  <text x="64" y="540" font-family="Consolas" font-size="20" fill="#8b9098">UX/UI designer · Almaty · open to work</text>
+  <text x="64" y="500" font-family="Segoe UI" font-size="28" fill="#e8e9e4">UX/UI-дизайнер · интерфейсы в Figma</text>
+  <text x="64" y="540" font-family="Consolas" font-size="20" fill="#8b9098">UX/UI designer · open to work</text>
   <rect x="64" y="572" width="10" height="10" fill="${ACCENT}"/>
   <text x="84" y="582" font-family="Consolas" font-size="16" fill="#8b9098">3D portfolio — click to explore</text>
 </svg>`

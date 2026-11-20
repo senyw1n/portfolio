@@ -1,6 +1,6 @@
 import { STATIONS } from '../data'
 import { useLang, useT, setLang } from '../i18n'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Rich from './Rich'
 import Icon from './Icon'
 
@@ -137,7 +137,6 @@ function ContactPanel({ t }) {
           </a>
         ))}
       </div>
-      <div className="foot">© {new Date().getFullYear()} Sayat Zhaksybay · {c.foot}</div>
     </div>
   )
 }
@@ -147,14 +146,25 @@ const PANELS = [HeroPanel, AboutPanel, SkillsPanel, WorkPanel, PathPanel, Contac
 export default function Overlay({ active, go }) {
   const lang = useLang()
   const t = useT()
-  const st = STATIONS[active]
-  const Panel = PANELS[active]
+  // Плавная смена текста: старый блок гаснет, затем появляется новый
+  const [shown, setShown] = useState(active)
+  const [leaving, setLeaving] = useState(false)
+  useEffect(() => {
+    if (active === shown) return
+    setLeaving(true)
+    const id = setTimeout(() => {
+      setShown(active)
+      setLeaving(false)
+    }, 280)
+    return () => clearTimeout(id)
+  }, [active, shown])
+  const st = STATIONS[shown]
+  const Panel = PANELS[shown]
   const last = STATIONS.length - 1
   return (
     <div className="ui">
       <aside className="side">
         <div className="file">
-          <span>{t.ui.city}</span>
           <div className="lang" role="group" aria-label={t.ui.langSwitch}>
             {['ru', 'en'].map((l) => (
               <button key={l} className={l === lang ? 'on' : ''} aria-pressed={l === lang} onClick={() => setLang(l)}>
@@ -174,7 +184,7 @@ export default function Overlay({ active, go }) {
 
       <div className="vp-tag">[ {t.ui.viewport[0]} ] [ <span>{t.ui.viewport[1]}</span> ] — {t.names[active]}</div>
 
-      <section key={`${active}-${lang}`} className={`content is-${st.layout} st-${st.id}`} data-scroll>
+      <section key={`${shown}-${lang}`} className={`content is-${st.layout} st-${st.id} ${leaving ? "leaving" : ""}`} data-scroll>
         <Panel go={go} t={t} />
       </section>
 
