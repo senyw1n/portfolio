@@ -42,7 +42,7 @@ const ru = {
     props: [
       ['Имя', 'Sayat Zhaksybay'],
       ['Позиция', 'Junior UX/UI-дизайнер'],
-      ['Образование', 'Narxoz, 2025'],
+      ['Образование', 'Университет Narxoz, бакалавриат — «Цифровой менеджмент и дизайн», 2025'],
       ['Занятость', 'Полная, в офисе'],
     ],
     status: ['Статус', '● Открыт к предложениям'],
@@ -127,7 +127,7 @@ const en = {
     props: [
       ['Name', 'Sayat Zhaksybay'],
       ['Role', 'Junior UX/UI Designer'],
-      ['Education', 'Narxoz, 2025'],
+      ['Education', 'Narxoz University, Bachelor’s in Digital Management and Design, 2025'],
       ['Employment', 'Full-time, on-site'],
     ],
     status: ['Status', '● Open to offers'],
