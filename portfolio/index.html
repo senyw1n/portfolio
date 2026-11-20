@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sayat Zhaksybay — UX/UI и 3D</title>
+<meta name="description" content="Портфолио Sayat Zhaksybay: UX/UI-дизайн, веб-дизайн и 3D-моделирование. Алматы.">
+<style>
+  :root {
+    --bg: #101113;
+    --panel: #17191c;
+    --panel-2: #1e2125;
+    --line: #2b2f35;
+    --text: #e8e9e4;
+    --muted: #8b9098;
+    --accent: #c6ff3d;
+    --x: #ff5a5a;
+    --y: #5ad17a;
+    --z: #5a9bff;
+    --mono: Consolas, "Cascadia Mono", "Courier New", monospace;
+    --sans: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    --side: 248px;
+    --bar: 30px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+    background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    padding-bottom: var(--bar);
+  }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--accent); color: #000; }
+
+  /* ── Обозреватель сцены (боковая панель) ── */
+  .side {
+    position: fixed; inset: 0 auto var(--bar) 0; width: var(--side);
+    background: var(--panel); border-right: 1px solid var(--line);
+    display: flex; flex-direction: column;
+    font-family: var(--mono); font-size: 13px; z-index: 20;
+  }
+  .side-head {
+    padding: 14px 16px; border-bottom: 1px solid var(--line);
+    color: var(--muted); letter-spacing: .08em; text-transform: uppercase; font-size: 11px;
+    display: flex; justify-content: space-between;
+  }
+  .file { padding: 16px; border-bottom: 1px solid var(--line); }
+  .file b { display: block; color: var(--accent); font-weight: 400; }
+  .file span { color: var(--muted); font-size: 12px; }
+  .tree { padding: 10px 0; flex: 1; overflow: auto; }
+  .tree a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 16px; color: var(--muted); border-left: 2px solid transparent;
+  }
+  .tree a::before { content: "▸"; font-size: 10px; }
+  .tree a i { width: 9px; height: 9px; border: 1px solid currentColor; display: inline-block; transform: rotate(45deg); }
+  .tree a:hover { color: var(--text); background: var(--panel-2); }
+  .tree a.on { color: var(--accent); border-left-color: var(--accent); background: var(--panel-2); }
+  .tree a.on::before { content: "▾"; }
+  .tree a.on i { background: var(--accent); }
+  .gizmo { padding: 16px; border-top: 1px solid var(--line); }
+  .gizmo svg { width: 76px; height: 76px; display: block; }
+  .gizmo text { font-family: var(--mono); font-size: 11px; }
+
+  /* ── Строка состояния ── */
+  .status {
+    position: fixed; inset: auto 0 0 0; height: var(--bar); z-index: 30;
+    background: var(--panel-2); border-top: 1px solid var(--line);
+    display: flex; align-items: center; gap: 22px; padding: 0 16px;
+    font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden;
+  }
+  .status b { font-weight: 400; }
+  .status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; margin-right: 6px; animation: blink 1.6s infinite; }
+  .status .right { margin-left: auto; }
+  @keyframes blink { 50% { opacity: .25; } }
+
+  main { margin-left: var(--side); }
+  section { padding: 84px clamp(20px, 5vw, 72px); border-bottom: 1px solid var(--line); position: relative; }
+  .label {
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    letter-spacing: .1em; text-transform: uppercase; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .label::before { content: ""; width: 10px; height: 10px; background: var(--accent); transform: rotate(45deg); }
+  h2 { font-size: clamp(30px, 4.6vw, 56px); line-height: 1.02; letter-spacing: -.035em; font-weight: 800; margin-bottom: 36px; max-width: 16ch; }
+  h2 em { font-style: normal; color: transparent; -webkit-text-stroke: 1px var(--text); }
+
+  /* ── Вьюпорт (первый экран) ── */
+  .viewport { min-height: calc(100vh - var(--bar)); padding: 0; display: grid; overflow: hidden; }
+  .viewport canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .vp-tag {
+    position: absolute; top: 16px; left: 20px; font-family: var(--mono); font-size: 12px; color: var(--muted); z-index: 2;
+  }
+  .vp-tag span { color: var(--accent); }
+  .vp-corner { position: absolute; width: 18px; height: 18px; border: 1px solid var(--accent); opacity: .7; }
+  .vp-corner.tl { top: 44px; left: 20px; border-right: 0; border-bottom: 0; }
+  .vp-corner.tr { top: 44px; right: 20px; border-left: 0; border-bottom: 0; }
+  .vp-corner.bl { bottom: 20px; left: 20px; border-right: 0; border-top: 0; }
+  .vp-corner.br { bottom: 20px; right: 20px; border-left: 0; border-top: 0; }
+  .hero { position: relative; z-index: 2; align-self: end; padding: 0 clamp(28px, 5vw, 72px) 72px; pointer-events: none; }
+  .hero > * { pointer-events: auto; }
+  h1 {
+    font-size: clamp(54px, 11.5vw, 168px); line-height: .86; letter-spacing: -.055em; font-weight: 800;
+    text-transform: uppercase;
+  }
+  h1 .stroke { color: transparent; -webkit-text-stroke: 1.5px var(--text); display: block; }
+  h1 .fill { display: block; color: var(--accent); }
+  .roles { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 8px; font-family: var(--mono); font-size: 13px; }
+  .roles span { border: 1px solid var(--line); background: rgba(16,17,19,.7); padding: 6px 12px; }
+  .roles span:first-child { border-color: var(--accent); color: var(--accent); }
+  .hero p { margin-top: 22px; max-width: 52ch; color: var(--muted); font-size: 17px; }
+  .hero p b { color: var(--text); font-weight: 600; }
+  .btns { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn {
+    font-family: var(--mono); font-size: 13px; padding: 12px 20px;
+    border: 1px solid var(--line); background: var(--panel); transition: .15s;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--accent); }
+  .btn.go { background: var(--accent); color: #0b0c0d; border-color: var(--accent); font-weight: 700; }
+  .btn.go:hover { color: #0b0c0d; box-shadow: 4px 4px 0 var(--text); }
+
+  /* ── Свойства объекта (обо мне) ── */
+  .cols { display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: start; }
+  .prose p { color: var(--muted); font-size: 18px; margin-bottom: 16px; max-width: 54ch; }
+  .prose p b { color: var(--text); font-weight: 600; }
+  .panel { background: var(--panel); border: 1px solid var(--line); font-family: var(--mono); font-size: 13px; }
+  .panel-head {
+    padding: 10px 14px; border-bottom: 1px solid var(--line); color: var(--muted);
+    display: flex; justify-content: space-between; background: var(--panel-2);
+    text-transform: uppercase; letter-spacing: .08em; font-size: 11px;
+  }
+  .prop { display: grid; grid-template-columns: 130px 1fr; border-bottom: 1px solid var(--line); }
+  .prop:last-child { border-bottom: 0; }
+  .prop span { padding: 10px 14px; color: var(--muted); border-right: 1px solid var(--line); }
+  .prop b { padding: 10px 14px; font-weight: 400; }
+
+  /* ── Стек модификаторов (навыки) ── */
+  .stacks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .mod { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--line); transition: .12s; }
+  .mod:last-child { border-bottom: 0; }
+  .mod::before { content: "◉"; color: var(--accent); font-size: 11px; }
+  .mod:hover { background: var(--accent); color: #0b0c0d; padding-left: 20px; }
+  .mod:hover::before { color: #0b0c0d; }
+  .langs { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 20px; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+  .langs b { color: var(--text); font-weight: 400; }
+
+  /* ── Проекты ── */
+  .shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  .shot { border: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column; transition: .15s; }
+  a.shot:hover { border-color: var(--accent); transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--accent); }
+  .shot-view {
+    aspect-ratio: 16 / 10; position: relative; overflow: hidden;
+    background:
+      linear-gradient(rgba(198,255,61,.08) 1px, transparent 1px) 0 0 / 20px 20px,
+      linear-gradient(90deg, rgba(198,255,61,.08) 1px, transparent 1px) 0 0 / 20px 20px,
+      var(--panel-2);
+    display: grid; place-items: center;
+    font-family: var(--mono); color: var(--muted); font-size: 13px;
+  }
+  .shot-view iframe, .shot-view img { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: cover; }
+  .shot-view .num { font-size: 64px; font-weight: 800; font-family: var(--sans); color: transparent; -webkit-text-stroke: 1px var(--line); }
+  .shot.empty { border-style: dashed; }
+  .shot-info { padding: 14px 16px; border-top: 1px solid var(--line); }
+  .shot-info small { font-family: var(--mono); color: var(--accent); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+  .shot-info h3 { font-size: 18px; letter-spacing: -.01em; margin: 2px 0 4px; }
+  .shot-info p { color: var(--muted); font-size: 14px; }
+
+  /* ── Таймлайн (опыт) ── */
+  .track { position: relative; padding-left: 34px; max-width: 760px; }
+  .track::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 1px; background: repeating-linear-gradient(var(--line) 0 6px, transparent 6px 12px); }
+  .key { position: relative; padding: 0 0 34px; }
+  .key:last-child { padding-bottom: 0; }
+  .key::before {
+    content: ""; position: absolute; left: -33px; top: 7px; width: 13px; height: 13px;
+    background: var(--bg); border: 1px solid var(--accent); transform: rotate(45deg);
+  }
+  .key.now::before { background: var(--accent); box-shadow: 0 0 0 5px rgba(198,255,61,.15); }
+  .key small { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: .08em; text-transform: uppercase; }
+  .key h3 { font-size: 24px; letter-spacing: -.02em; line-height: 1.2; margin: 2px 0 6px; }
+  .key p { color: var(--muted); max-width: 56ch; }
+
+  /* ── Рендер (контакты) ── */
+  .render { background: var(--accent); color: #0b0c0d; border-bottom: 0; }
+  .render .label { color: #0b0c0d; opacity: .7; }
+  .render .label::before { background: #0b0c0d; }
+  .render h2 { max-width: none; font-size: clamp(40px, 9vw, 128px); line-height: .9; text-transform: uppercase; margin-bottom: 40px; }
+  .render h2 em { -webkit-text-stroke: 1.5px #0b0c0d; }
+  .links { display: grid; grid-template-columns: repeat(3, 1fr); border: 1.5px solid #0b0c0d; }
+  .links a { padding: 20px; border-right: 1.5px solid #0b0c0d; transition: .15s; display: block; }
+  .links a:last-child { border-right: 0; }
+  .links a:hover { background: #0b0c0d; color: var(--accent); }
+  .links small { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; display: block; }
+  .links b { font-size: clamp(16px, 1.7vw, 21px); letter-spacing: -.01em; word-break: break-word; }
+  .foot { margin-top: 28px; font-family: var(--mono); font-size: 12px; opacity: .7; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+  /* Появление блоков */
+  .rv { opacity: 0; transform: translateY(18px); transition: opacity .6s, transform .6s; }
+  .rv.in { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    .side { inset: 0 0 auto 0; width: auto; height: 46px; flex-direction: row; align-items: center; border-right: 0; border-bottom: 1px solid var(--line); }
+    .side-head, .file, .gizmo { display: none; }
+    .tree { display: flex; padding: 0; overflow-x: auto; scrollbar-width: none; }
+    .tree::-webkit-scrollbar { display: none; }
+    .tree a { padding: 0 14px; height: 46px; border-left: 0; border-bottom: 2px solid transparent; white-space: nowrap; }
+    .tree a::before { display: none; }
+    .tree a.on { border-bottom-color: var(--accent); }
+    main { margin-left: 0; padding-top: 46px; }
+    .viewport { min-height: calc(100vh - var(--bar) - 46px); }
+    .cols, .stacks { grid-template-columns: 1fr; }
+    .links { grid-template-columns: 1fr; }
+    .links a { border-right: 0; border-bottom: 1.5px solid #0b0c0d; }
+    .links a:last-child { border-bottom: 0; }
+    section { padding-top: 60px; padding-bottom: 60px; }
+    .status .hide-m { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rv { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<aside class="side">
+  <div class="side-head"><span>Сцена</span><span>5 объектов</span></div>
+  <div class="file"><b>sayat_portfolio.max</b><span>Алматы · 2026</span></div>
+  <nav class="tree" id="tree">
+    <a href="#top" class="on"><i></i>00_Главная</a>
+    <a href="#about"><i></i>01_Обо_мне</a>
+    <a href="#skills"><i></i>02_Навыки</a>
+    <a href="#work"><i></i>03_Проекты</a>
+    <a href="#path"><i></i>04_Опыт</a>
+    <a href="#contact"><i></i>05_Контакты</a>
+  </nav>
+  <div class="gizmo">
+    <svg viewBox="0 0 76 76" aria-hidden="true">
+      <line x1="30" y1="46" x2="68" y2="46" stroke="#ff5a5a" stroke-width="2"/>
+      <line x1="30" y1="46" x2="30" y2="8" stroke="#5ad17a" stroke-width="2"/>
+      <line x1="30" y1="46" x2="8" y2="68" stroke="#5a9bff" stroke-width="2"/>
+      <text x="66" y="60" fill="#ff5a5a">X</text>
+      <text x="36" y="14" fill="#5ad17a">Y</text>
+      <text x="14" y="74" fill="#5a9bff">Z</text>
+    </svg>
+  </div>
+</aside>
+
+<main>
+  <!-- 00 Главная -->
+  <section class="viewport" id="top">
+    <canvas id="scene"></canvas>
+    <div class="vp-tag">[ Перспектива ] [ <span>Каркас</span> ] — двигайте мышью, чтобы вращать</div>
+    <i class="vp-corner tl"></i><i class="vp-corner tr"></i><i class="vp-corner bl"></i><i class="vp-corner br"></i>
+    <div class="hero">
+      <h1><span class="stroke">Sayat</span><span class="fill">Zhaksybay</span></h1>
+      <div class="roles"><span>UX / UI</span><span>Web Design</span><span>3D-моделирование</span></div>
+      <p>Дизайнер из <b>Алматы</b>. Проектирую интерфейсы в Figma и собираю объёмные сцены в 3ds Max — от плоского экрана до трёхмерной формы.</p>
+      <div class="btns">
+        <a class="btn go" href="#work">Смотреть проекты ↓</a>
+        <a class="btn" href="https://t.me/senyw1n" target="_blank" rel="noopener">Telegram @senyw1n</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 Обо мне -->
+  <section id="about">
+    <div class="label">01 — Обо мне</div>
+    <h2 class="rv">Дизайн в двух <em>и трёх</em> измерениях</h2>
+    <div class="cols">
+      <div class="prose rv">
+        <p>Я выпускник <b>Narxoz</b> по направлению «Цифровой менеджмент и дизайн». Занимаюсь <b>UX/UI и веб-дизайном</b>: продумываю сценарии, рисую экраны и собираю макеты в Figma.</p>
+        <p>Второе направление — <b>3D-моделирование</b>. Работаю в 3ds Max и V-Ray, проходил стажировку по 3D-моделированию в компании <b>Seneca Partners</b>.</p>
+        <p>Понимаю и техническую сторону продукта: работаю с базами данных, PostgreSQL, API и Postman — поэтому говорю с разработчиками на одном языке.</p>
+      </div>
+      <div class="panel rv">
+        <div class="panel-head"><span>Свойства объекта</span><span>▾</span></div>
+        <div class="prop"><span>Имя</span><b>Sayat Zhaksybay</b></div>
+        <div class="prop"><span>Позиция</span><b>Начинающий специалист</b></div>
+        <div class="prop"><span>Город</span><b>Алматы, Казахстан</b></div>
+        <div class="prop"><span>Образование</span><b>Narxoz, 2025</b></div>
+        <div class="prop"><span>Занятость</span><b>Полная</b></div>
+        <div class="prop"><span>Формат</span><b>В офисе</b></div>
+        <div class="prop"><span>Статус</span><b style="color:var(--accent)">● Ищу работу</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Навыки -->
+  <section id="skills">
+    <div class="label">02 — Навыки</div>
+    <h2 class="rv">Стек <em>модификаторов</em></h2>
+    <div class="stacks">
+      <div class="panel rv">
+        <div class="panel-head"><span>Дизайн</span><span>05</span></div>
+        <div class="mod">UX</div><div class="mod">UI</div><div class="mod">Web Design</div><div class="mod">Figma</div><div class="mod">Adobe Photoshop</div>
+      </div>
+      <div class="panel rv">
+        <div class="panel-head"><span>3D</span><span>03</span></div>
+        <div class="mod">3D-моделирование</div><div class="mod">3ds Max</div><div class="mod">V-Ray</div>
+      </div>
+      <div class="panel rv">
+        <div class="panel-head"><span>Данные</span><span>04</span></div>
+        <div class="mod">Работа с базами данных</div><div class="mod">PostgreSQL</div><div class="mod">API</div><div class="mod">Postman</div>
+      </div>
+    </div>
+    <div class="langs"><span>Языки:</span><span><b>Казахский</b> — родной</span><span><b>Русский</b> — B2</span></div>
+  </section>
+
+  <!-- 03 Проекты -->
+  <section id="work">
+    <div class="label">03 — Проекты</div>
+    <h2 class="rv">Работы <em>из Figma</em></h2>
+    <div class="shots" id="shots"></div>
+  </section>
+
+  <!-- 04 Опыт -->
+  <section id="path">
+    <div class="label">04 — Опыт и образование</div>
+    <h2 class="rv">Ключевые <em>кадры</em></h2>
+    <div class="track">
+      <div class="key now rv">
+        <small>Сейчас</small>
+        <h3>Ищу первую постоянную работу</h3>
+        <p>Полная занятость в Алматы, в офисе. Интересны UX/UI, веб-дизайн и 3D.</p>
+      </div>
+      <div class="key rv">
+        <small>Стажировка</small>
+        <h3>3D-моделирование — Seneca Partners</h3>
+        <p>Проходил стажировку по 3D-моделированию: работал с моделями и сценами в 3ds Max.</p>
+      </div>
+      <div class="key rv">
+        <small>2025 · Высшее образование</small>
+        <h3>Narxoz</h3>
+        <p>Направление «Цифровой менеджмент и дизайн».</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 Контакты -->
+  <section class="render" id="contact">
+    <div class="label">05 — Контакты</div>
+    <h2>Давайте <em>работать</em></h2>
+    <div class="links">
+      <a href="https://t.me/senyw1n" target="_blank" rel="noopener"><small>Telegram</small><b>@senyw1n</b></a>
+      <a href="mailto:zhaksybay009@mail.ru"><small>Почта</small><b>zhaksybay009@mail.ru</b></a>
+      <a href="tel:+77072558027"><small>Телефон</small><b>+7 (707) 255-80-27</b></a>
+    </div>
+    <div class="foot"><span>© <span id="year"></span> Sayat Zhaksybay</span><span>Рендер завершён · 100%</span></div>
+  </section>
+</main>
+
+<div class="status">
+  <span><i class="dot"></i>Открыт к предложениям</span>
+  <span class="hide-m">X: <b id="sx">0</b></span>
+  <span class="hide-m">Y: <b id="sy">0</b></span>
+  <span class="hide-m">Z: <b id="sz">0</b></span>
+  <span class="right">Сетка: 24 px</span>
+</div>
+
+<script>
+  /* ══ ПРОЕКТЫ ══
+     Добавляйте сюда работы. url — ссылка на файл или прототип в Figma.
+     embed: true — показать макет прямо на странице (файл в Figma должен быть открыт по ссылке).
+     Пример:
+     { title: 'Мобильное приложение', tag: 'UX / UI', desc: 'Коротко о задаче и результате.', url: 'https://www.figma.com/design/...', embed: true }
+  */
+  const PROJECTS = [
+    {
+      title: 'DortMate',
+      tag: 'Дипломный проект · Narxoz',
+      desc: 'Дипломная работа, выполненная в сотрудничестве с университетом Narxoz: от идеи и сценариев до десятков готовых экранов.',
+      url: 'https://www.figma.com/design/bAH38YcqmVi86RLrCn2Bw5/Untitled',
+      embed: true
+    },
+    {
+      title: 'Редизайн сайта Aiges',
+      tag: 'Тестовое задание · Web Design',
+      desc: 'Редизайн сайта компании по техническому заданию: новая структура страниц, сетка и визуальный стиль.',
+      url: 'https://www.figma.com/design/bxF51HGquZW4AvIIs7GJ1B/%D0%A2%D0%97',
+      embed: false // файл закрыт: включите true, когда откроете доступ по ссылке в Figma
+    },
+    {
+      title: 'Кофейный концепт',
+      tag: 'Личный проект · Эксперимент',
+      desc: 'Проект на тему кофе, сделанный для себя: пробовал новые для себя приёмы и подходы в дизайне.',
+      url: 'https://www.figma.com/design/Ra4juISp0416V8mUSb1iNY/Untitled?node-id=2-10',
+      embed: false // файл закрыт: включите true, когда откроете доступ по ссылке в Figma
+    }
+  ];
+  const MIN_SLOTS = 3;
+
+  const shots = document.getElementById('shots');
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const pad = n => String(n).padStart(2, '0');
+  let html = '';
+  PROJECTS.forEach((p, i) => {
+    const view = p.embed
+      ? `<iframe loading="lazy" allowfullscreen src="${esc(p.url.replace('://www.figma.com/', '://embed.figma.com/') + (p.url.includes('?') ? '&' : '?') + 'embed-host=portfolio')}"></iframe>`
+      : p.image ? `<img src="${esc(p.image)}" alt="${esc(p.title)}">` : `<span class="num">${pad(i + 1)}</span><span style="position:absolute;bottom:12px;left:14px">Открыть в Figma ↗</span>`;
+    html += `<a class="shot rv" href="${esc(p.url)}" target="_blank" rel="noopener">
+      <div class="shot-view">${view}</div>
+      <div class="shot-info"><small>${esc(p.tag || 'Figma')}</small><h3>${esc(p.title)}</h3><p>${esc(p.desc || '')}</p></div></a>`;
+  });
+  for (let i = PROJECTS.length; i < MIN_SLOTS; i++) {
+    html += `<div class="shot empty rv">
+      <div class="shot-view"><span class="num">${pad(i + 1)}</span></div>
+      <div class="shot-info"><small>Слот свободен</small><h3>Проект скоро появится</h3><p>Здесь будет работа из Figma.</p></div></div>`;
+  }
+  shots.innerHTML = html;
+
+  /* ══ Каркасный объект во вьюпорте ══ */
+  const cv = document.getElementById('scene'), ctx = cv.getContext('2d');
+  const t = (1 + Math.sqrt(5)) / 2;
+  const V = [[-1,t,0],[1,t,0],[-1,-t,0],[1,-t,0],[0,-1,t],[0,1,t],[0,-1,-t],[0,1,-t],[t,0,-1],[t,0,1],[-t,0,-1],[-t,0,1]];
+  const E = [];
+  for (let i = 0; i < V.length; i++) for (let j = i + 1; j < V.length; j++) {
+    const d = Math.hypot(V[i][0]-V[j][0], V[i][1]-V[j][1], V[i][2]-V[j][2]);
+    if (Math.abs(d - 2) < .01) E.push([i, j]);
+  }
+  let W = 0, H = 0, rx = .4, ry = .6, tx = 0, ty = 0, mx = 0, my = 0;
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function size() {
+    const r = cv.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
+    W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function rot(p, a, b) {
+    let [x, y, z] = p;
+    let c = Math.cos(b), s = Math.sin(b); [x, z] = [x * c + z * s, -x * s + z * c];
+    c = Math.cos(a); s = Math.sin(a); [y, z] = [y * c - z * s, y * s + z * c];
+    return [x, y, z];
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const wide = W > 700;
+    const cx = wide ? W * .72 : W * .5, cy = wide ? H * .42 : H * .2;
+    const R = Math.min(W, H) * (wide ? .2 : .13);
+    // пол-сетка в перспективе
+    ctx.lineWidth = 1;
+    const fy = cy + R * 2.1;
+    for (let i = -8; i <= 8; i++) {
+      ctx.strokeStyle = 'rgba(255,255,255,.07)';
+      ctx.beginPath(); ctx.moveTo(cx + i * R * .22, fy - R * .5); ctx.lineTo(cx + i * R * .75, fy + R * .9); ctx.stroke();
+    }
+    for (let k = 0; k <= 6; k++) {
+      const q = k / 6, y = fy - R * .5 + q * q * R * 1.4, w = R * (1.76 + q * q * 4.24);
+      ctx.beginPath(); ctx.moveTo(cx - w, y); ctx.lineTo(cx + w, y); ctx.stroke();
+    }
+    // объект
+    const pts = V.map(v => {
+      const [x, y, z] = rot(v, rx, ry), k = 5 / (5 + z);
+      return [cx + x * R * k * .62, cy + y * R * k * .62, z];
+    });
+    E.forEach(([a, b]) => {
+      const z = (pts[a][2] + pts[b][2]) / 2, o = .25 + .75 * (1 - (z + 2) / 4);
+      ctx.strokeStyle = `rgba(198,255,61,${o.toFixed(2)})`;
+      ctx.lineWidth = 1 + o;
+      ctx.beginPath(); ctx.moveTo(pts[a][0], pts[a][1]); ctx.lineTo(pts[b][0], pts[b][1]); ctx.stroke();
+    });
+    pts.forEach(p => {
+      ctx.fillStyle = p[2] < 0 ? '#e8e9e4' : '#6c7178';
+      ctx.fillRect(p[0] - 2.5, p[1] - 2.5, 5, 5);
+    });
+  }
+  function loop() {
+    tx += (mx - tx) * .06; ty += (my - ty) * .06;
+    // при «уменьшении движения» нет автовращения, но объект по-прежнему крутится мышью
+    ry += (still ? 0 : .004) + tx * .02; rx += ty * .02;
+    draw();
+    sx.textContent = (ry * 57.3 % 360).toFixed(1);
+    sy.textContent = (rx * 57.3 % 360).toFixed(1);
+    sz.textContent = scrollY.toFixed(0);
+    requestAnimationFrame(loop);
+  }
+  const sx = document.getElementById('sx'), sy = document.getElementById('sy'), sz = document.getElementById('sz');
+  addEventListener('resize', size);
+  addEventListener('pointermove', e => { mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5; });
+  size(); loop();
+
+  /* ══ Подсветка раздела в дереве сцены и появление блоков ══ */
+  const links = [...document.querySelectorAll('#tree a')];
+  const spy = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id));
+  }), { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('main section').forEach(s => spy.observe(s));
+
+  const rv = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); rv.unobserve(e.target); }
+  }), { threshold: .12 });
+  document.querySelectorAll('.rv').forEach(el => rv.observe(el));
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
