@@ -72,8 +72,7 @@ function build() {
 
   // Голова 8×8×8 и лицо
   box(-4, 3, 26, 33, -4, 3, C.skin)
-  box(-3, -3, 29, 30, 3, 3, C.eyeWhite); box(-2, -2, 29, 30, 3, 3, C.pupil)
-  box(1, 1, 29, 30, 3, 3, C.pupil); box(2, 2, 29, 30, 3, 3, C.eyeWhite)
+  box(-3, -2, 29, 30, 3, 3, C.eyeWhite); box(1, 2, 29, 30, 3, 3, C.eyeWhite) // белки; зрачки — отдельно, следят за курсором
   box(-3, -2, 31, 31, 3, 3, C.brow); box(1, 2, 31, 31, 3, 3, C.brow)
   box(-1, 0, 28, 28, 3, 3, C.skinShade) // нос
   box(-1, 0, 27, 27, 3, 3, C.mouth)
@@ -115,6 +114,9 @@ const PIVOT = [6, 26] // плечо правой руки, в вокселях
 
 /* Набор вокселей одним InstancedMesh; offset — сдвиг в вокселях (для руки от плеча) */
 const ZERO = [0, 0]
+// Насколько зрачок может сдвинуться внутри белка (в метрах сцены)
+const EYE_X = VOXEL * 0.5
+const EYE_Y = VOXEL * 0.22
 function Voxels({ list, size, offset = ZERO, ...props }) {
   const ref = useRef()
   useLayoutEffect(() => {
@@ -149,6 +151,12 @@ export default function VoxelMe({ size = VOXEL, on = true }) {
   const [msg, setMsg] = useState(null)
   const [hov, setHov] = useState(false)
   useCursor(hov)
+  const eyes = useRef()
+  const pupilL = useRef()
+  const pupilR = useRef()
+  const look = useRef({ x: 0, y: 0 })
+  const blink = useRef(3)
+  const headPos = useMemo(() => new THREE.Vector3(), [])
 
   const greet = () => {
     wave.current = 2.4
@@ -177,6 +185,22 @@ export default function VoxelMe({ size = VOXEL, on = true }) {
     const target = wave.current > 0 ? 2.55 + Math.sin(s.clock.elapsedTime * 11) * 0.32 : 0
     arm.current.rotation.z += (target - arm.current.rotation.z) * Math.min(1, dt * 9)
     hand.current.visible = arm.current.rotation.z > 0.6
+
+    // Глаза следят за курсором: сравниваем положение курсора с головой на экране
+    const head = eyes.current.getWorldPosition(headPos).project(s.camera)
+    const tx = THREE.MathUtils.clamp((s.pointer.x - head.x) * 0.12, -EYE_X, EYE_X)
+    const ty = THREE.MathUtils.clamp((s.pointer.y - head.y) * 0.08, -EYE_Y, EYE_Y)
+    const k = Math.min(1, dt * 10)
+    look.current.x += (tx - look.current.x) * k
+    look.current.y += (ty - look.current.y) * k
+    pupilL.current.position.set(-2 * size + look.current.x, look.current.y, 0)
+    pupilR.current.position.set(2 * size + look.current.x, look.current.y, 0)
+
+    // Иногда моргает
+    blink.current -= dt
+    if (blink.current < 0) blink.current = 2.5 + Math.random() * 3
+    const closed = !REDUCED && blink.current < 0.12
+    eyes.current.scale.y = closed ? 0.15 : 1
   })
 
   const events = {
@@ -188,6 +212,17 @@ export default function VoxelMe({ size = VOXEL, on = true }) {
   return (
     <group>
       <Voxels list={parts.body} size={size} {...events} />
+      {/* Зрачки: тонкие пластинки перед белками глаз (белки — x −3..−2 и 1..2, y 29..30) */}
+      <group ref={eyes} position={[0, 30 * size, 4 * size + 0.004]}>
+        <mesh ref={pupilL}>
+          <boxGeometry args={[size * 0.94, size * 1.5, 0.004]} />
+          <meshStandardMaterial color="#2a1d16" roughness={0.6} />
+        </mesh>
+        <mesh ref={pupilR}>
+          <boxGeometry args={[size * 0.94, size * 1.5, 0.004]} />
+          <meshStandardMaterial color="#2a1d16" roughness={0.6} />
+        </mesh>
+      </group>
       <group ref={arm} position={[PIVOT[0] * size, PIVOT[1] * size, 0]}>
         <Voxels list={parts.arm} size={size} offset={PIVOT} {...events} />
         <group ref={hand}>
